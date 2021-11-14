@@ -1,7 +1,7 @@
 function ClassList(){
   return(
     <div>
-      <h2>ClassList - sidebar</h2>
+      {/* <h2>ClassList - sidebar</h2> */}
     </div>
   )
 }
