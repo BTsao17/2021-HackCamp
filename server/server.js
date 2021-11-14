@@ -17,6 +17,9 @@ const io = new Server(server, {
   },
 });
 
+//list of connected users/sockets
+let connectedUsers = {};
+
 //Socket connection
 io.on('connection', async (socket) => {
   console.log('made socket connection', socket.id); 
@@ -26,5 +29,18 @@ io.on('connection', async (socket) => {
   console.log('number of socket connection', sockets.length);
   let socketIDs = sockets.map((socket) => socket.id);
   console.log('socketIDS:', socketIDs);
+
+  //user enters chat 
+
+
+  //send text
+  socket.on('send message', (data) => {
+    console.log(data);
+    socket.emit('send message', data);
+    socket.broadcast.emit('send message', data);
+  })
+
+
+  //user leaves chat
 
 });

@@ -1,44 +1,101 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SocketContext, socket } from '../services/socket.js';
 
 function ChatBox() {
-  const [ username, setUsername ] = useState('');
+  const [ username, setUsername ] = useState('Bob');
   const [ usernameInput, setUsernameInput ] = useState('');
 
   const handleFormChange = (e) => {
-    setUsernameInput(e.target.value);
+    setUsernameInput(e.target.value.trim());
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (!usernameInput) {
-      return alert('Username cannot be empty!');
+    if (usernameInput !== '') {
+      setUsername(usernameInput);
+      setUsernameInput('');
     }
-    setUsername(usernameInput);
-    setUsernameInput('');
   };
 
-  //socket makes connection regardless of view - need to make changes so that connection only occurs after username is entered. Issue with multiple connection still?
-  return username ? (
-    <SocketContext.Provider value={socket}>
-      <Chatroom username={username} />
-    </SocketContext.Provider>
-  ) : (
-    <div className='userNameForm'>
-      <h2>Please enter a username</h2>
-      <form onSubmit={(e) => handleFormSubmit(e)}>
-        <input id='username' onChange={(e) => handleFormChange(e)} required />
-        <button type='submit'>Submit</button>
-      </form>
+  //socket makes connection regardless of view - need to make changes so that connection only occurs after username is entered.
+  return (
+    <div>
+      {username ? (
+        <SocketContext.Provider value={socket}>
+          <Chat username={username} />
+        </SocketContext.Provider>
+      ) : (
+        <div id='userNameForm'>
+          <h2>Please enter a username</h2>
+          <form onSubmit={(e) => handleFormSubmit(e)}>
+            <input id='username' value={usernameInput} onChange={(e) => handleFormChange(e)} required />
+            <button type='submit'>Submit</button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
 
-function Chatroom({ username }) {
-  console.log('chatroom - username', username);
+function Chat({ username }) {
+  const clientSocket = useContext(SocketContext);
+
+  const [ messages, setMessages ] = useState([]);
+  const [ textInput, setTextInput ] = useState('');
+
+  //listening for events from server
+  useEffect(
+    () => {
+      clientSocket.on('send message', (data) => {
+        console.log('message received', data);
+        let newMessagesArr = [ ...messages, data ];
+        console.log(newMessagesArr);
+        console.log('orig messages', messages);
+        setMessages(newMessagesArr);
+      });
+    },
+    [ clientSocket, messages ]
+  );
+
+  const handleTextInputChange = (e) => {
+    setTextInput(e.target.value);
+  };
+
+  const handleTextInputSubmit = (e) => {
+    e.preventDefault();
+    if (textInput !== '') {
+      //emit to backend
+      clientSocket.emit('send message', {
+        text: textInput,
+        user: username,
+      });
+      setTextInput('');
+    }
+  };
+
   return (
     <div>
       <h2>Chat Room for Class ______</h2>
+      <button>Exit Chat</button>
+      <div>
+        <p>messages will be displayed here.</p>
+        <ul>
+          {messages.map((message, i) => {
+            return (
+              <li key={i}>
+                <p>{message.user}</p>
+                <p>{message.text}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div id='textForm'>
+        <form onSubmit={(e) => handleTextInputSubmit(e)}>
+          <input id='textMsg' value={textInput} onChange={(e) => handleTextInputChange(e)} required />
+          <button type='submit'>Send</button>
+        </form>
+      </div>
     </div>
   );
 }
