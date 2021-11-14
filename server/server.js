@@ -13,7 +13,7 @@ const io = new Server(server, {
   /*options*/
   serveClient: false,
   cors: {
-    origin: 'http://localhost:8080',
+    origin: 'http://localhost:3000',
   },
 });
 
