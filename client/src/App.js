@@ -5,10 +5,10 @@ import { ChatBox, ClassList, CodeEditor } from './components';
 function App() {
   return (
     <React.Fragment>
-      <header class="pageHeader">
+      <header className="pageHeader">
         <h1>App Name</h1>
       </header>
-      <main class="app">
+      <main className="app">
         <ClassList />
         <CodeEditor />
         <ChatBox />
