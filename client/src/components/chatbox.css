@@ -2,11 +2,13 @@
   margin: 6rem 4rem;
   border: 5px solid gray;
   background-color: whitesmoke;
+  min-height: 30rem;
 }
 
 /* Form CSS */
 #usernameForm {
   text-align: center;
+  height: 30vh;
 }
 
 .formPrompt {
@@ -41,9 +43,43 @@
   padding: 1.5rem 1rem;
 }
 
-.messages {
-  height: 30vh;
+.outputMessages {
+  height: 16rem;
   overflow-y: scroll;
+}
+
+.messageList {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 1rem;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.message {
+  max-width: 40%;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.message p {
+  margin: 6px;
+}
+
+.alignRight {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.alignLeft {
+  align-self: flex-start;
+  text-align: left;
+}
+
+.user {
+  font-weight:700;
 }
 
 .textForm form {
@@ -53,6 +89,7 @@
 
 .textInput {
   flex-grow: 2;
+  padding: 0.5rem;
 }
 
 .textSendBut {

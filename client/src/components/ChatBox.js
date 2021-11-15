@@ -3,7 +3,7 @@ import { SocketContext, socket } from '../services/socket.js';
 import './chatbox.css';
 
 function ChatBox() {
-  const [ username, setUsername ] = useState('Bonnie');
+  const [ username, setUsername ] = useState('');
   const [ usernameInput, setUsernameInput ] = useState('');
 
   const handleFormChange = (e) => {
@@ -49,7 +49,7 @@ function ChatBox() {
 function Chat({ username }) {
   const clientSocket = useContext(SocketContext);
 
-  const [ messages, setMessages ] = useState([ { text: 'hi', user: 'Bonnie' } ]);
+  const [ messages, setMessages ] = useState([]);
   const [ textInput, setTextInput ] = useState('');
 
   //listening for events from server
@@ -82,25 +82,46 @@ function Chat({ username }) {
   return (
     <div id='chat'>
       <header className='chatHeader'>
-        <h2>Chat Room for Class ______</h2>
+        <div>
+          <h2>Chat Room for Class ______</h2>
+          <p>You are signed in as: {username}</p>
+        </div>
         <button>Exit Chat</button>
       </header>
-      <div className='messages'>
-        <ul>
+      <div className='outputMessages'>
+        <ul className='messageList'>
           {messages.map((message, i) => {
-            return (
-              <li key={i}>
-                <p>{message.user}</p>
-                <p>{message.text}</p>
-              </li>
-            );
+            if (message.user === username) {
+              console.log('same user!');
+              return (
+                <li className='message alignRight ownMessage' key={i}>
+                  <p>{message.text}</p>
+                </li>
+              );
+            }
+            else {
+              return (
+                <li className='message alignLeft otherMessage' key={i}>
+                  <p className='user'>{message.user}:</p>
+                  <p>{message.text}</p>
+                </li>
+              );
+            }
           })}
         </ul>
       </div>
       <div id='textForm' className='textForm'>
         <form onSubmit={(e) => handleTextInputSubmit(e)}>
-          <textarea id='textMsg' className='textInput' value={textInput} onChange={(e) => handleTextInputChange(e)} required />
-          <button className='textSendBut' type='submit'>Send</button>
+          <textarea
+            id='textMsg'
+            className='textInput'
+            value={textInput}
+            onChange={(e) => handleTextInputChange(e)}
+            required
+          />
+          <button className='textSendBut' type='submit'>
+            Send
+          </button>
         </form>
       </div>
     </div>
