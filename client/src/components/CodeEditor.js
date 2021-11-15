@@ -109,12 +109,12 @@ export default class CodeEditor extends Component {
  
     return (
           <>
-          <div class="box">
+          <div className="box">
           <div className="row container-fluid">
             <div className="col-6 ml-4 ">
               <label htmlFor="solution ">
               </label>
-              <nav class="navbar navbar-light" id="header">
+              <nav className="navbar navbar-light" id="header">
                   <span> Code Editor</span>
               </nav>
               <textarea
@@ -156,13 +156,13 @@ export default class CodeEditor extends Component {
             <div className="col-5">
               
               <div>
-                <nav class="navbar navbar-light" id="header">
+                <nav className="navbar navbar-light" id="header">
                   <span> Output</span>
               </nav>
                 <textarea id="output"></textarea>
                 
               </div>
-              <nav class="navbar navbar-light" id="inputHeader">
+              <nav className="navbar navbar-light" id="inputHeader">
                   <span> Input </span>
               </nav>
             
