@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { SocketContext, socket } from '../services/socket.js';
 
 function ChatBox() {
-  const [ username, setUsername ] = useState('Bob');
+  const [ username, setUsername ] = useState('');
   const [ usernameInput, setUsernameInput ] = useState('');
 
   const handleFormChange = (e) => {
@@ -19,15 +19,15 @@ function ChatBox() {
 
   //socket makes connection regardless of view - need to make changes so that connection only occurs after username is entered.
   return (
-    <div>
+    <div id='chatBox'>
       {username ? (
         <SocketContext.Provider value={socket}>
           <Chat username={username} />
         </SocketContext.Provider>
       ) : (
         <div id='userNameForm'>
-          <h2>Please enter a username</h2>
           <form onSubmit={(e) => handleFormSubmit(e)}>
+            <h2>Please enter a username: </h2>
             <input id='username' value={usernameInput} onChange={(e) => handleFormChange(e)} required />
             <button type='submit'>Submit</button>
           </form>
@@ -47,10 +47,7 @@ function Chat({ username }) {
   useEffect(
     () => {
       clientSocket.on('send message', (data) => {
-        console.log('message received', data);
         let newMessagesArr = [ ...messages, data ];
-        console.log(newMessagesArr);
-        console.log('orig messages', messages);
         setMessages(newMessagesArr);
       });
     },
