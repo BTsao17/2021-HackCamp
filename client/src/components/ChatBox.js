@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { SocketContext, socket } from '../services/socket.js';
+import './chatbox.css';
 
 function ChatBox() {
-  const [ username, setUsername ] = useState('');
+  const [ username, setUsername ] = useState('Bonnie');
   const [ usernameInput, setUsernameInput ] = useState('');
 
   const handleFormChange = (e) => {
@@ -25,11 +26,19 @@ function ChatBox() {
           <Chat username={username} />
         </SocketContext.Provider>
       ) : (
-        <div id='userNameForm'>
+        <div id='usernameForm'>
+          <h2 className='formPrompt'>Please enter a username: </h2>
           <form onSubmit={(e) => handleFormSubmit(e)}>
-            <h2>Please enter a username: </h2>
-            <input id='username' value={usernameInput} onChange={(e) => handleFormChange(e)} required />
-            <button type='submit'>Submit</button>
+            <input
+              id='username'
+              className='usernameInput'
+              value={usernameInput}
+              onChange={(e) => handleFormChange(e)}
+              required
+            />
+            <button className='usernameBut' type='submit'>
+              Submit
+            </button>
           </form>
         </div>
       )}
@@ -40,7 +49,7 @@ function ChatBox() {
 function Chat({ username }) {
   const clientSocket = useContext(SocketContext);
 
-  const [ messages, setMessages ] = useState([]);
+  const [ messages, setMessages ] = useState([ { text: 'hi', user: 'Bonnie' } ]);
   const [ textInput, setTextInput ] = useState('');
 
   //listening for events from server
@@ -71,11 +80,12 @@ function Chat({ username }) {
   };
 
   return (
-    <div>
-      <h2>Chat Room for Class ______</h2>
-      <button>Exit Chat</button>
-      <div>
-        <p>messages will be displayed here.</p>
+    <div id='chat'>
+      <header className='chatHeader'>
+        <h2>Chat Room for Class ______</h2>
+        <button>Exit Chat</button>
+      </header>
+      <div className='messages'>
         <ul>
           {messages.map((message, i) => {
             return (
@@ -87,10 +97,10 @@ function Chat({ username }) {
           })}
         </ul>
       </div>
-      <div id='textForm'>
+      <div id='textForm' className='textForm'>
         <form onSubmit={(e) => handleTextInputSubmit(e)}>
-          <input id='textMsg' value={textInput} onChange={(e) => handleTextInputChange(e)} required />
-          <button type='submit'>Send</button>
+          <textarea id='textMsg' className='textInput' value={textInput} onChange={(e) => handleTextInputChange(e)} required />
+          <button className='textSendBut' type='submit'>Send</button>
         </form>
       </div>
     </div>

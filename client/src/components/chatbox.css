@@ -1,0 +1,64 @@
+#chatBox {
+  margin: 6rem 4rem;
+  border: 5px solid gray;
+  background-color: whitesmoke;
+}
+
+/* Form CSS */
+#usernameForm {
+  text-align: center;
+}
+
+.formPrompt {
+  padding: 3rem 0 2rem;
+}
+
+.usernameInput,
+.usernameBut {
+  padding: .5rem;
+}
+
+.usernameInput {
+  width: 16rem;
+}
+
+.usernameBut:hover {
+  background-color: #e4ddf4;
+}
+
+/* Chat CSS */
+#chat {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.chatHeader {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  background-color: lightgrey;
+  margin-bottom: 2rem;
+  padding: 1.5rem 1rem;
+}
+
+.messages {
+  height: 30vh;
+  overflow-y: scroll;
+}
+
+.textForm form {
+  margin-top: 2rem;
+  display: flex;
+}
+
+.textInput {
+  flex-grow: 2;
+}
+
+.textSendBut {
+  padding: 1rem 4rem;
+}
+
+.textSendBut:hover {
+  background-color: #e4ddf4;
+}

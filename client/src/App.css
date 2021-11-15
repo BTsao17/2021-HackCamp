@@ -1,10 +1,16 @@
-.app{
-    background-color: #fffbf0;
+.app {
+  background-color: #fffbf0;
 }
 
 .pageHeader {
-    background-color: #e4ddf4;
-    height: 100px;
-    text-align: center;
-    
+  background-color: #e4ddf4;
+  text-align: center;
+}
+
+.title {
+  padding-top: 30px;
+}
+
+.tagline {
+  padding-bottom: 30px;
 }

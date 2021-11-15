@@ -6,7 +6,8 @@ function App() {
   return (
     <React.Fragment>
       <header className="pageHeader">
-        <h1>App Name</h1>
+        <h1 className='title'>CS-Helper</h1>
+        <p className='tagline'>Created by Bonnie Tsao, Patrick Gousseau and Aysath Rukshana for nwPlus HackCamp 2021</p>
       </header>
       <main className="app">
         <ClassList />
