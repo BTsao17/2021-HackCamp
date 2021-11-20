@@ -52,6 +52,15 @@ function Chat({ username }) {
   const [ messages, setMessages ] = useState([]);
   const [ textInput, setTextInput ] = useState('');
 
+  //set up socket connection to server
+  useEffect(
+    () => {
+      clientSocket.connect();
+      clientSocket.emit('login', { username });
+    },
+    [ clientSocket, username ]
+  );
+
   //listening for events from server
   useEffect(
     () => {
@@ -59,6 +68,7 @@ function Chat({ username }) {
         let newMessagesArr = [ ...messages, data ];
         setMessages(newMessagesArr);
       });
+      //do we need a return to unbind? socket.off('send message', listener)?
     },
     [ clientSocket, messages ]
   );
@@ -91,6 +101,13 @@ function Chat({ username }) {
       <div className='outputMessages'>
         <ul className='messageList'>
           {messages.map((message, i) => {
+            if (message.user === 'login') {
+              return (
+                <li className='loginMessage' key={i}>
+                  <p>{message.text}</p>
+                </li>
+              );
+            }
             if (message.user === username) {
               console.log('same user!');
               return (
