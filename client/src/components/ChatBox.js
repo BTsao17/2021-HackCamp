@@ -18,12 +18,16 @@ function ChatBox() {
     }
   };
 
+  const removeUsername = (e) => {
+    setUsername('');
+  };
+
   //socket makes connection regardless of view - need to make changes so that connection only occurs after username is entered.
   return (
     <div id='chatBox'>
       {username ? (
         <SocketContext.Provider value={socket}>
-          <Chat username={username} />
+          <Chat username={username} logoff={removeUsername} />
         </SocketContext.Provider>
       ) : (
         <div id='usernameForm'>
@@ -46,7 +50,7 @@ function ChatBox() {
   );
 }
 
-function Chat({ username }) {
+function Chat({ username, logoff }) {
   const clientSocket = useContext(SocketContext);
 
   const [ messages, setMessages ] = useState([]);
@@ -68,7 +72,10 @@ function Chat({ username }) {
         let newMessagesArr = [ ...messages, data ];
         setMessages(newMessagesArr);
       });
-      //do we need a return to unbind? socket.off('send message', listener)?
+      //unbind event handlers before component unmounts: socket.off('send message', listener)?
+      return () => {
+        socket.off('send message'); //not sure if need to do something similar on server-side.
+      };
     },
     [ clientSocket, messages ]
   );
@@ -89,6 +96,14 @@ function Chat({ username }) {
     }
   };
 
+  //'exiting chat'
+  const handleExit = (e) => {
+    e.preventDefault();
+    console.log('exit chat click');
+    clientSocket.disconnect(true);
+    logoff();
+  };
+
   return (
     <div id='chat'>
       <header className='chatHeader'>
@@ -96,7 +111,7 @@ function Chat({ username }) {
           <h2>Chat Room for Class ______</h2>
           <p>You are signed in as: {username}</p>
         </div>
-        <button>Exit Chat</button>
+        <button onClick={(e) => handleExit(e)}>Exit Chat</button>
       </header>
       <div className='outputMessages'>
         <ul className='messageList'>

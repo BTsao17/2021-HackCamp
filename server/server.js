@@ -21,6 +21,7 @@ const io = new Server(server, {
 let connectedUsers = {};
 
 //Socket connection
+//default (main) namespace "/"
 io.on('connection', async (socket) => {
   console.log('made socket connection', socket.id);
 
@@ -59,5 +60,21 @@ io.on('connection', async (socket) => {
     socket.broadcast.emit('send message', data);
   });
 
-  //user leaves chat
+  //user logs out
+  //fired upon disconnection
+  socket.on('disconnect', (reason) => {
+    console.log('disconnect', reason);
+    console.log(`${socket.id}: ${connectedUsers[socket.id]} to be disconnected.`);
+    let disconnectedUser = connectedUsers[socket.id];
+    delete connectedUsers[socket.id];
+    console.log('remaining connected Users List', connectedUsers);
+    socket.broadcast.emit('send message', {
+      user: 'logout',
+      text: `${disconnectedUser} has logged off.`,
+    });
+  });
+  //fired when the client is going to be disconnected (but hasn't left its rooms yet)
+  socket.on('disconnecting', (reason) => {
+    console.log('disconnecting event - rooms not left yet');
+  });
 });
